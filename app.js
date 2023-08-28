@@ -6,8 +6,8 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const { conectarDB } = require('./database.js');
+const relaciones = require('./models/relaciones.js');
 
-conectarDB()
 
 const app = express();
 const port = process.env.PORT || 4000
@@ -24,8 +24,9 @@ app.use(require('./routes/playlist.routes'));
 
 app.use((req, res, next) => {
     return res.status(404);
-
+    
 })
-
+conectarDB()
+relaciones()
 // Starting the server
 app.listen(port, () => console.log(`Server on port http://localhost:${port}`));

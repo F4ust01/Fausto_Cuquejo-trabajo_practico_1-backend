@@ -1,30 +1,34 @@
 const { DataTypes, sequelize } = require('../database');
 
-const Playlist = sequelize.define('Playlist', {
+const Canciones = sequelize.define('Canciones', {
     // Model attributes are defined here
-    idPlaylist: {
+    idCancion: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull:false
     },
-    nombre: {
+    titulo: {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    fecha_hora_creacion: {
+    fecha_lanzamiento: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    descripcion: {
+    artista: {
         type: DataTypes.STRING(100),
         allowNull: false
     },
-    idUsers: {
+    idPlaylist: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
     genero: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    album: {
         type: DataTypes.STRING(50),
         allowNull: false
     },
@@ -50,12 +54,12 @@ const Playlist = sequelize.define('Playlist', {
     createdAt: true,
     updatedAt: true,
     deletedAt: true,
-    tableName: 'playlist'
+    tableName: 'Canciones'
 });
 
 // Crear tabla si no existe ({force: true} borra y crea la tabla)
-Playlist.sync({ force: false }).then(() => {
-    console.log('Tabla de Playlist creada');
+Canciones.sync({ force: false }).then(() => {
+    console.log('Tabla de Canciones creada');
 });
 
-module.exports = Playlist;
+module.exports = Canciones;
