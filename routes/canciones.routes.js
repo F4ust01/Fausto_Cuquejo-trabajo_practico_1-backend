@@ -1,5 +1,5 @@
 
-const { obtenerCancion, crearUnaCancion, obtenerUnaCancion } = require('../controllers/Cancion.controllers');
+const /* { obtenerCancion, crearUnaCancion, obtenerUnaCancion } */ ctrl = require('../controllers/canciones.controllers');
 
 const router = require('express').Router();
 
@@ -8,13 +8,13 @@ const router = require('express').Router();
 // ==========================================
 
 //Obtener Un Cancion
-router.get('/api/:id', obtenerUnaCancion);
+router.get('/:id', ctrl.obtenerUnaCancion);
  
 // Obtener todas las Cancion
-router.get('/api/', obtenerCancion);
+router.get('/', ctrl.obtenerCanciones);
  
 // Crear Un Cancion
-router.post('/api/', crearUnaCancion);
+router.post('/', ctrl.crearUnaCancion);
 
  
  module.exports = router;

@@ -1,4 +1,6 @@
+const Users = require("../models/users");
 const Playlist = require("../models/playlist");
+const Canciones = require("../models/canciones");
 
 const ctrlPlaylist = {};
 
@@ -9,10 +11,26 @@ const ctrlPlaylist = {};
 // Obtener todas las playlist
 
 ctrlPlaylist.obtenerPlaylist= async (req, res) => {
+    const {idUsers}=req.params
     try {
-     const todasLasPlaylist = await Playlist.findAll()
-     if (!todasLasPlaylist.length) {
-         throw new Error("No hay Playlist")
+     const todasLasPlaylist = await Playlist.findAll({
+        where:{
+            estado:true,
+            idUsers
+        },
+        include:[{
+            model:Canciones,
+            attributes:["titulo"],
+        },{
+            model:Users,
+            attributes:["nombreUsuario"]
+        }]
+     })
+     if (todasLasPlaylist.length===0) {
+         throw ({
+            status: 404,
+            message: "No hay Playlist"
+         })
      }
      return res.json(todasLasPlaylist)
     } catch (error) {
@@ -25,9 +43,21 @@ ctrlPlaylist.obtenerPlaylist= async (req, res) => {
 ctrlPlaylist.obtenerUnaPlaylist= async (req, res) => {
     const {id} = req.params
     try {
-     const unaPlaylist = await Playlist.findByPk(id)
+     const unaPlaylist = await Playlist.findOne({
+        where:{
+            idPlaylist: id
+        },
+        
+        include:[{
+            model:Canciones,
+            attributes:["titulo"],
+        },{
+            model:Users,
+            attributes:["nombreUsuario"]
+        }]
+     })
      if (!unaPlaylist) {
-         throw new Error("No existe la Playlist")
+         res.status(404).json({message:'no existe la playlist'})
      }
      return res.json(unaPlaylist)
     } catch (error) {
@@ -39,8 +69,9 @@ ctrlPlaylist.obtenerUnaPlaylist= async (req, res) => {
 
 ctrlPlaylist.crearUnaPlaylist= async (req, res) => {
     
-    const { nombre, fecha_hora_creacion, descripcion, creador, genero } = req.body
-
+    const { nombre, fecha_hora_creacion, descripcion, creador, genero  } = req.body
+    const {idUsers}=req.params
+    console.log(idUsers);
     try {
      const nuevaPlaylist = await Playlist.create({
         nombre, 
@@ -48,6 +79,7 @@ ctrlPlaylist.crearUnaPlaylist= async (req, res) => {
         descripcion, 
         creador, 
         genero, 
+        idUsers:idUsers,
         codigo: new Date().getTime()
      })
      if (!nuevaPlaylist) {
@@ -89,7 +121,13 @@ ctrlPlaylist.editarPlaylist= async (req, res) => {
 ctrlPlaylist.eliminarUnaPlaylist= async (req, res) => {
     const {id} = req.params
     try {
-     const PlaylistEliminada = await Playlist.destroy({where : {idPlaylist:id}})
+     const PlaylistEliminada = await Playlist.update({
+        estado:false
+     },{
+        where:{
+            idPlaylist:id
+        }
+     })
      if (!PlaylistEliminada) {
          throw new Error("No se ha podido eliminar la Playlist")
      }

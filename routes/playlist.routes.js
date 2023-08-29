@@ -8,19 +8,19 @@ const router = require('express').Router();
 // ==========================================
 
 //Obtener una Playlist
-router.get('/api/:id', obtenerUnaPlaylist);
+router.get('/one/:id', obtenerUnaPlaylist);
  
 // Obtener todas las Playlist
-router.get('/api/', obtenerPlaylist);
+router.get('/:idUsers', obtenerPlaylist);
  
 // Crear una Playlist
-router.post('/api/', crearUnaPlaylist);
+router.post('/:idUsers', crearUnaPlaylist);
  
 // Actualizar una Playlist
-router.put('/api/:id', editarPlaylist);
+router.put('/:id', editarPlaylist);
  
 // Eliminar una Playlist de forma lógica
-router.delete('/api/:id', eliminarUnaPlaylist);
+router.delete('/:id', eliminarUnaPlaylist);
 
  
  module.exports = router;

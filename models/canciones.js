@@ -57,9 +57,9 @@ const Canciones = sequelize.define('Canciones', {
     tableName: 'Canciones'
 });
 
-// Crear tabla si no existe ({force: true} borra y crea la tabla)
-Canciones.sync({ force: false }).then(() => {
-    console.log('Tabla de Canciones creada');
-});
+// // Crear tabla si no existe ({force: true} borra y crea la tabla)
+// Canciones.sync({ force: false }).then(() => {
+//     console.log('Tabla de Canciones creada');
+// });
 
 module.exports = Canciones;

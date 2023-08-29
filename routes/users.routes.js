@@ -1,6 +1,7 @@
-
-const { obtenerUser, crearUnUser, obtenerUnUser } = require('../controllers/User.controllers');
-
+ 
+const { obtenerUser, crearUnUser, obtenerUnUser } = require('../controllers/users.controllers');
+const createUserSchema =require('../models/user.schemas');
+const validateSchema =require('../middlewares/validador');
 const router = require('express').Router();
 
 // ==========================================
@@ -8,13 +9,13 @@ const router = require('express').Router();
 // ==========================================
 
 //Obtener Un User
-router.get('/api/:id', obtenerUnUser);
+router.get('/:id', obtenerUnUser);
  
 // Obtener todas las User
-router.get('/api/', obtenerUser);
+router.get('/', obtenerUser);
  
 // Crear Un User
-router.post('/api/', crearUnUser);
+router.post('/',createUserSchema,validateSchema, crearUnUser);
 
  
  module.exports = router;

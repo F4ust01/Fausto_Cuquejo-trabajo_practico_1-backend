@@ -1,4 +1,5 @@
-const Canciones = require("../models/Cancion");
+const Canciones = require("../models/canciones");
+const playlist = require("../models/playlist");
 
 const ctrlCancion = {};
 
@@ -22,7 +23,7 @@ ctrlCancion.obtenerCanciones= async (req, res) => {
 
 // Obtener un Cancion
 
-ctrlCancion.obtenerUnCancion= async (req, res) => {
+ctrlCancion.obtenerUnaCancion= async (req, res) => {
     const {id} = req.params
     try {
      const unaCancion = await Canciones.findByPk(id)
@@ -37,9 +38,9 @@ ctrlCancion.obtenerUnCancion= async (req, res) => {
 
 // Crear un Cancion
 
-ctrlCancion.crearUnCancion= async (req, res) => {
+ctrlCancion.crearUnaCancion= async (req, res) => {
     
-    const { titulo, fecha_lanzamiento, artista, genero, album } = req.body
+    const { titulo, fecha_lanzamiento, artista, genero, album, idPlaylist } = req.body
 
     try {
      const nuevaCancion = await Canciones.create({
@@ -52,6 +53,8 @@ ctrlCancion.crearUnCancion= async (req, res) => {
      if (!nuevaCancion) {
          throw new Error("No se ha podido crear la Cancion")
      }
+     const playlist = await playlist.findByPk(id)
+     playlist.addCanciones(nuevaCancion)
      return res.json({nuevaCancion, message: "Cancion creada correctamente"})
     } catch (error) {
      console.error(error)

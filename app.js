@@ -4,6 +4,7 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
+const {sequelize} = require("./database")
 
 const { conectarDB } = require('./database.js');
 const relaciones = require('./models/relaciones.js');
@@ -20,7 +21,9 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 // Routes
-app.use(require('./routes/playlist.routes'));
+app.use("/api/playlist", require('./routes/playlist.routes'));
+app.use("/api/canciones", require('./routes/canciones.routes.js'));
+app.use("/api/users", require('./routes/users.routes.js'));
 
 app.use((req, res, next) => {
     return res.status(404);
@@ -28,5 +31,11 @@ app.use((req, res, next) => {
 })
 conectarDB()
 relaciones()
+
+
 // Starting the server
-app.listen(port, () => console.log(`Server on port http://localhost:${port}`));
+
+sequelize.sync({ force: false }).then(() => {
+     console.log('Tabla de Playlist creada');
+     app.listen(port, () => console.log(`Server on port http://localhost:${port}`));
+});
